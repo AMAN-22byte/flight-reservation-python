@@ -1,0 +1,124 @@
+class Flight:
+    def __init__(self, number, num_seats):
+        self.number = number
+        self.num_seats = num_seats
+        self.seat_status = [0] * num_seats
+
+    def check_seat_availability(self, seatno):
+        if 0 <= seatno < self.num_seats:
+            if self.seat_status[seatno] == 0:
+                return "Seat is available."
+            else:
+                return "Seat is already booked."
+        else:
+            return "Invalid seat number."
+
+    def bookseat(self, seatno):
+        if 0 <= seatno < self.num_seats:
+            if self.seat_status[seatno] == 0:
+                self.seat_status[seatno] = 1
+                return f"Seat {seatno} booked. Cost: ${self.get_seat_price(seatno)}."
+            else:
+                return "Seat is already booked."
+        else:
+            return "Invalid seat number."
+
+    def cancel(self, seatno):
+        if 0 <= seatno < self.num_seats:
+            if self.seat_status[seatno] == 1:
+                self.seat_status[seatno] = 0
+                return f"Reservation canceled for Seat {seatno}."
+            else:
+                return "No reservation to cancel."
+        else:
+            return "Invalid seat number."
+
+    def displaybooked(self):
+        print(f"Seat occupancy for Flight {self.number}:")
+        for seatno, status in enumerate(self.seat_status):
+            if status == 0:
+                print(f"Seat {seatno}: Available")
+            else:
+                print(f"Seat {seatno}: Booked")
+
+    def get_seat_price(self, seatno):
+        return 100
+
+class FlightReservationSystem:
+    def __init__(self):
+        self.flights = []
+
+    def add_flight(self, flight):
+        self.flights.append(flight)
+
+    def get_flight_by_number(self, number):
+        for flight in self.flights:
+            if flight.number == number:
+                return flight
+        return None
+
+    def display_menu(self):
+        print("Flight Reservation System Menu:")
+        print("1. Check seat availability for a specific flight.")
+        print("2. Book a seat for a specific flight.")
+        print("3. Cancel a reservation for a specific flight.")
+        print("4. Display the current seat occupancy status for a specific flight.")
+        print("5. Exit the program.")
+
+    def run(self):
+        while True:
+            self.display_menu()
+            choice = input("Enter your choice (1/2/3/4/5): ")
+
+            if choice == "1":
+                number = input("Enter flight number: ")
+                seatno = int(input("Enter seat number: "))
+                flight = self.get_flight_by_number(number)
+                if flight:
+                    print(flight.checkseatavailability(seatno))
+                else:
+                    print("Flight not found.")
+
+            elif choice == "2":
+                number = input("Enter flight number: ")
+                seatno = int(input("Enter seat number: "))
+                flight = self.get_flight_by_number(number)
+                if flight:
+                    print(flight.bookseat(seatno))
+                else:
+                    print("Flight not found.")
+
+            elif choice == "3":
+                number = input("Enter flight number: ")
+                seatno = int(input("Enter seat number: "))
+                flight = self.get_flight_by_number(number)
+                if flight:
+                    print(flight.cancel(seatno))
+                else:
+                    print("Flight not found.")
+
+            elif choice == "4":
+                number = input("Enter flight number: ")
+                flight = self.get_flight_by_number(number)
+                if flight:
+                    flight.displaybooked()
+                else:
+                    print("Flight not found.")
+
+            elif choice == "5":
+                print("Exiting the program. Thank you!")
+                break
+
+            else:
+                print("Invalid choice. Please select a valid option (1/2/3/4/5).")
+
+
+reservation_system = FlightReservationSystem()
+flight1 = Flight("101", 10)
+flight2 = Flight("102", 20)
+flight3=Flight("103",20)
+reservation_system.add_flight(flight1)
+reservation_system.add_flight(flight2)
+reservation_system.add_flight(flight3)
+
+reservation_system.run()
